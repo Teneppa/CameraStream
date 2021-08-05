@@ -10,21 +10,23 @@ camera = cv2.VideoCapture(0)  # use 0 for web camera
 def gen_frames():  # generate frame by frame from camera
     while True:
         suc, img = camera.read()
+        if suc:
+            # HIGH RES BUT SLOW?
+            #img = cv2.resize(img, ((480,320)), interpolation=cv2.INTER_AREA)
+            #img = cv2.resize(img, ((480,480)), interpolation=cv2.INTER_AREA)
+            img = cv2.resize(img, ((240,180)), interpolation=cv2.INTER_NEAREST)    #1.8.2021
+            #img = cv2.resize(img, ((120,90)), interpolation=cv2.INTER_AREA)
+            #img = cv2.resize(img, ((60,45)), interpolation=cv2.INTER_NEAREST)
 
-        # HIGH RES BUT SLOW?
-        #img = cv2.resize(img, ((480,320)), interpolation=cv2.INTER_AREA)
-        #img = cv2.resize(img, ((480,480)), interpolation=cv2.INTER_AREA)
-        img = cv2.resize(img, ((240,180)), interpolation=cv2.INTER_NEAREST)    #1.8.2021
-        #img = cv2.resize(img, ((120,90)), interpolation=cv2.INTER_AREA)
-        #img = cv2.resize(img, ((60,45)), interpolation=cv2.INTER_NEAREST)
+            ret, buffer = cv2.imencode('.jpg', img)
 
-        ret, buffer = cv2.imencode('.jpg', img)
-        
-        frame = buffer.tobytes()
-        yield (b'--frame\r\n'
-               b'Content-Type:image/jpeg\r\n'
-               b'Content-Length: ' + f"{len(frame)}".encode() + b'\r\n'
-               b'\r\n' + frame + b'\r\n')
+            frame = buffer.tobytes()
+            yield (b'--frame\r\n'
+                   b'Content-Type:image/jpeg\r\n'
+                   b'Content-Length: ' + f"{len(frame)}".encode() + b'\r\n'
+                   b'\r\n' + frame + b'\r\n')
+        else:
+            print(suc)
 
 
 @app.route('/video_feed')
