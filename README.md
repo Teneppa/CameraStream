@@ -1,5 +1,5 @@
 # CameraStream
-This is a demonstration that streams the image from smartglasses to a pc, does the hand recognition on the remote pc and streams the processed image back to the smartglasses.
+This is a demonstration that streams the image from smartglasses to a pc, does the hand recognition on the remote pc and streams the processed image back to the smartglasses and displays it there.
 
 What the files do:
 * [PC] cameraStream.py - Sends the videostream from the camera to the remote computer
